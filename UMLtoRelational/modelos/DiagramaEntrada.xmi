@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsmUML2:Diagrama
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dsmUML2="http://dsmUML2"
+    xsi:schemaLocation="http://dsmUML2 /UMLtoRelational/modelos/dsmUML2.ecore"
+    nombre="Proyectos">
+  <clase nombre="Proyecto">
+    <atributo
+        nombre="Entero Proyecto"/>
+    <atributo
+        nombre="Cadena Proyecto"
+        tipo="cadena"/>
+    <atributo
+        nombre="Real Proyecto"
+        tipo="real"/>
+    <atributo
+        nombre="Boolean Proyecto"
+        tipo="boolean"/>
+  </clase>
+  <clase nombre="Tarea">
+    <atributo
+        nombre="Horas"/>
+    <atributo
+        nombre="Documento"/>
+  </clase>
+</dsmUML2:Diagrama>

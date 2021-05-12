@@ -3,14 +3,25 @@
 
 module UML2Relational;
 create OUT : Relational from IN : UML;
+helper context UML!Atributo def : convierteTipo() : Relational!TipoDatosER = 
+	if self.tipo = #entero then #integer
+	else 
+		if self.tipo = #cadena then #string
+		else 
+			if self.tipo = #real then #double
+			else #fecha 
+			endif 
+		endif 
+	endif;
+
 
 rule Diagrama2Esquema {
 	from
 		diagrama : UML!Diagrama
 	to 
 		esquema : Relational!Esquema (
-			Nombre <- diagrama.nombre
-			
+			Nombre <- diagrama.nombre,
+			Tablas <- diagrama.clase
 		)
 }
 
@@ -21,13 +32,28 @@ rule Clase2Tabla {
 		tabla : Relational!Tabla (
 			Nombre <- clase.nombre,
 			Padre <- clase.diagrama,
-			columnas <- Sequence {key} ->
-				union(clase.atributo->select(e | not e.multiValued)),
-			key <- Set {key}
+			columnas <- col
 		),
-		key : Relational!Columna
-		(
-			Nombre <- 'objectId',
-			Tipo <- Integer
+		col : Relational!Columna(
+			Nombre <- 'id_' + tabla.Nombre,
+			tabla <- tabla,
+			EsPrimaria <- true,
+			EsUnico <- true,
+			rango <- 1,
+			Tipo <- #integer
+		)
+}
+
+rule Atributo2Columna {
+	from
+		atributo : UML!Atributo
+	to 
+		columna : Relational!Columna (
+			Nombre <- atributo.nombre,
+			EsPrimaria <- false,
+			EsUnico <- false,
+			rango <- atributo.rango,
+			tabla <- atributo.clase,
+			Tipo <- atributo.convierteTipo()
 		)
 }
